@@ -1,9 +1,7 @@
 const CONFIG = {
     STORAGE_TYPE: 'supabase',
-
     SUPABASE_URL: 'https://iedqgyzxyvrhjmthmhlr.supabase.co',
     SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllZHFneXp4eXZyaGptdGhtaGxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NTgzODIsImV4cCI6MjA4MDUzNDM4Mn0.pst0bTh5tuHHemRixXyTQ6OWenYebd_3l4W3a4bSQD8',
-
     REGISTRATION_EXPIRY: 24
 };
 
@@ -30,7 +28,7 @@ class SupabaseManager {
             const data = await response.json();
             return data.ip;
         } catch (error) {
-            console.warn('Não foi possível obter IP:', error);
+            console.warn('Nao foi possivel obter IP:', error);
             return 'unknown-' + Math.random().toString(36).substr(2, 9);
         }
     }
@@ -38,7 +36,6 @@ class SupabaseManager {
     async checkDuplicateIP() {
         try {
             const userIP = await this.getUserIP();
-
             const response = await fetch(
                 `${this.url}/rest/v1/${this.table}?user_ip=eq.${userIP}&select=id`,
                 {
@@ -59,7 +56,7 @@ class SupabaseManager {
             return data.length > 0;
         } catch (error) {
             console.error('Erro ao verificar duplicata:', error);
-            throw new Error('Erro ao verificar se você já se inscreveu');
+            throw new Error('Erro ao verificar se voce ja se inscreveu');
         }
     }
 
@@ -92,15 +89,13 @@ class SupabaseManager {
             if (!response.ok) {
                 const error = await response.json();
                 console.error('Erro Supabase:', error);
-
                 if (response.status === 409) {
-                    throw new Error('Você já tem um time inscrito!');
+                    throw new Error('Voce ja tem um time inscrito!');
                 }
-
                 throw new Error(`Erro ao salvar: ${response.status}`);
             }
 
-            console.log('✅ Time registrado com sucesso!');
+            console.log('Time registrado com sucesso!');
             return { success: true };
         } catch (error) {
             console.error('Erro ao salvar time:', error);
@@ -192,7 +187,7 @@ form.addEventListener('submit', async (e) => {
         await supabaseManager.saveTeam(teamData);
 
         successMessage.classList.add('show');
-        console.log('✅ Time registrado:', teamData);
+        console.log('Time registrado:', teamData);
 
         setTimeout(() => {
             form.reset();
@@ -204,8 +199,8 @@ form.addEventListener('submit', async (e) => {
         }, 3000);
 
     } catch (error) {
-        console.error('❌ Erro:', error);
-        apiError.textContent = `⚠️ ERRO: ${error.message}`;
+        console.error('Erro:', error);
+        apiError.textContent = `ERRO: ${error.message}`;
         apiError.classList.add('show');
 
         submitBtn.disabled = false;

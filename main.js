@@ -1,8 +1,73 @@
+// ========== PROTEÇÃO CONTRA DEVTOOLS ==========
+let devtoolsOpen = false;
+const threshold = 160;
+
+function detectDevTools() {
+    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+
+    if (widthThreshold || heightThreshold) {
+        if (!devtoolsOpen) {
+            devtoolsOpen = true;
+            handleDevTools();
+        }
+    }
+}
+
+function handleDevTools() {
+    document.body.innerHTML = `
+        <div style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #000;
+            color: #ff0000;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 20px;
+            text-align: center;
+            padding: 20px;
+        ">
+            ⚠️ ACESSO NEGADO ⚠️<br><br>
+            DevTools detectado!
+        </div>
+    `;
+}
+
+// Debugger infinito
+setInterval(() => {
+    debugger;
+}, 100);
+
+// Monitora resize
+window.addEventListener('resize', detectDevTools);
+detectDevTools();
+
+// Bloqueia teclas de atalho
+document.addEventListener('keydown', (e) => {
+    if (
+        e.keyCode === 123 || // F12
+        (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+        (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+    ) {
+        e.preventDefault();
+        handleDevTools();
+        return false;
+    }
+});
+
+// Bloqueia menu de contexto
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    return false;
+});
+
+// ========== CONFIGURAÇÃO ==========
 const CONFIG = {
     STORAGE_TYPE: 'supabase',
     SUPABASE_URL: 'https://iedqgyzxyvrhjmthmhlr.supabase.co',
-    SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllZHFneXp4eXZyaGptdGhtaGxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NTgzODIsImV4cCI6MjA4MDUzNDM4Mn0.pst0bTh5tuHHemRixXyTQ6OWenYebd_3l4W3a4bSQD8',
-    REGISTRATION_EXPIRY: 24
+    SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllZHFneXp4eXZyaGptdGhtaGxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NTgzODIsImV4cCI6MjA4MDUzNDM4Mn0.pst0bTh5tuHHemRixXyTQ6OWenYebd_3l4W3a4bSQD8'
 };
 
 const form = document.getElementById('registrationForm');
@@ -33,6 +98,7 @@ class SupabaseManager {
         }
     }
 
+    // Verificação PERMANENTE de IP (sem expiração de 24h)
     async checkDuplicateIP() {
         try {
             const userIP = await this.getUserIP();
@@ -53,23 +119,58 @@ class SupabaseManager {
             }
 
             const data = await response.json();
-            return data.length > 0;
+            return data.length > 0; // Retorna true se IP já existe (BLOQUEIO PERMANENTE)
         } catch (error) {
             console.error('Erro ao verificar duplicata:', error);
             throw new Error('Erro ao verificar se voce ja se inscreveu');
         }
     }
 
+    // Verificar se algum nickname já existe em outro time
+    async checkDuplicateNicknames(nicknames) {
+        try {
+            const response = await fetch(
+                `${this.url}/rest/v1/${this.table}?select=nicknames`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'apikey': this.key,
+                        'Authorization': `Bearer ${this.key}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`Erro: ${response.status}`);
+            }
+
+            const teams = await response.json();
+            const allNicknames = teams.flatMap(team =>
+                team.nicknames.split(',').map(n => n.trim().toUpperCase())
+            );
+
+            // Verifica se algum dos nicknames já existe
+            const duplicates = nicknames.filter(nick =>
+                allNicknames.includes(nick.toUpperCase())
+            );
+
+            return duplicates;
+        } catch (error) {
+            console.error('Erro ao verificar nicknames:', error);
+            throw new Error('Erro ao verificar nicknames duplicados');
+        }
+    }
+
     async saveTeam(teamData) {
         try {
             const userIP = await this.getUserIP();
-            const expiresAt = new Date(Date.now() + CONFIG.REGISTRATION_EXPIRY * 60 * 60 * 1000);
 
             const payload = {
                 player_count: parseInt(teamData.playerCount),
                 nicknames: teamData.nicknames.join(','),
                 user_ip: userIP,
-                expires_at: expiresAt.toISOString()
+                created_at: new Date().toISOString()
             };
 
             const response = await fetch(
@@ -169,6 +270,7 @@ form.addEventListener('submit', async (e) => {
     apiError.textContent = '';
 
     try {
+        // 1. Verifica se o IP já registrou (BLOQUEIO PERMANENTE)
         const isDuplicate = await supabaseManager.checkDuplicateIP();
 
         if (isDuplicate) {
@@ -178,9 +280,22 @@ form.addEventListener('submit', async (e) => {
             return;
         }
 
+        const nicknames = Array.from(nicknameInputs).map(input => input.value.toUpperCase());
+
+        // 2. Verifica se algum nickname já existe em outro time
+        const duplicateNicks = await supabaseManager.checkDuplicateNicknames(nicknames);
+
+        if (duplicateNicks.length > 0) {
+            apiError.textContent = `!! NICKNAME JÁ EXISTE: ${duplicateNicks.join(', ')} !!`;
+            apiError.classList.add('show');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+            return;
+        }
+
         const teamData = {
             playerCount: selectedPlayers.value,
-            nicknames: Array.from(nicknameInputs).map(input => input.value.toUpperCase()),
+            nicknames: nicknames,
             date: '12/12'
         };
 

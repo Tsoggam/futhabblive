@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habblive - Inscrições</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="pixel-bg"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="habbo-character">🧑</div>
+            <div class="pixel-art-title">HABBLIVE COPA</div>
+            <div class="date-badge">⚽ 12/12 ⚽</div>
+            <p class="subtitle">inscreva seu time!</p>
+        </div>
+
+        <div class="form-container">
+            <form id="registrationForm">
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="section-icon">👥</span>
+                        Jogadores no Time
+                    </div>
+
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="players3" name="playerCount" value="3" required>
+                            <label for="players3" class="radio-label">3️⃣<br>Jogadores</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="players4" name="playerCount" value="4" required>
+                            <label for="players4" class="radio-label">4️⃣<br>Jogadores</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="players5" name="playerCount" value="5" required>
+                            <label for="players5" class="radio-label">5️⃣<br>Jogadores</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="playerError">!! SELECIONE QUANTIDADE !!</div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="section-icon">🎮</span>
+                        Nicknames
+                    </div>
+
+                    <div class="nicknames-container" id="nicknamesContainer">
+                    </div>
+                    <div class="error-message" id="nicknamesError">!! PREENCHA TODOS OS NICKS !!</div>
+                </div>
+
+                <div class="info-box">
+                    <strong>⚽ Data: 12/12 ⚽</strong>
+                    Prepare seu time! Será épico!
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">→ Inscrever Time ←</button>
+
+                <div class="success-message" id="successMessage">
+                    ✅ TIME INSCRITO! ✅<br>
+                    NOS VEMOS NO DIA 12/12!
+                </div>
+
+                <div class="error-message" id="apiError"></div>
+                <div class="info-box" id="duplicateWarning" style="display: none; background: #ff6b00;">
+                    <strong>⚠️ AVISO ⚠️</strong>
+                    Você já inscreveu um time! Apenas 1 por IP.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

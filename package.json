@@ -1,0 +1,16 @@
+{
+    "name": "habblive-campeonato-futebol",
+    "version": "1.0.0",
+    "description": "Copa Habblive de Futebol - Inscrições de Times",
+    "scripts": {
+        "dev": "python -m http.server 3000",
+        "build": "echo 'Static site ready'"
+    },
+    "keywords": [
+        "habblive",
+        "futebol",
+        "Copa"
+    ],
+    "author": "Maggost",
+    "license": "MIT"
+}

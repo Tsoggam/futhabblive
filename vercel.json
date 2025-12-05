@@ -2,11 +2,7 @@
     "version": 2,
     "routes": [
         {
-            "src": "/(.+)",
-            "dest": "/$1"
-        },
-        {
-            "src": "/(.*)",
+            "src": "/(?!main\\.js|style\\.css)(.+)$",
             "dest": "/index.html"
         }
     ]

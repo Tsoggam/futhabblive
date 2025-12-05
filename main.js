@@ -1,4 +1,3 @@
-// ========== PROTEÇÃO CONTRA DEVTOOLS ==========
 let devtoolsOpen = false;
 const threshold = 160;
 
@@ -34,22 +33,19 @@ function handleDevTools() {
     `;
 }
 
-// Debugger infinito
 setInterval(() => {
     debugger;
 }, 100);
 
-// Monitora resize
 window.addEventListener('resize', detectDevTools);
 detectDevTools();
 
-// Bloqueia teclas de atalho
 document.addEventListener('keydown', (e) => {
     if (
-        e.keyCode === 123 || // F12
-        (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-        (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+        e.keyCode === 123 ||
+        (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+        (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+        (e.ctrlKey && e.keyCode === 85)
     ) {
         e.preventDefault();
         handleDevTools();
@@ -57,13 +53,11 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Bloqueia menu de contexto
 document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     return false;
 });
 
-// ========== CONFIGURAÇÃO ==========
 const CONFIG = {
     STORAGE_TYPE: 'supabase',
     SUPABASE_URL: 'https://iedqgyzxyvrhjmthmhlr.supabase.co',
@@ -98,7 +92,6 @@ class SupabaseManager {
         }
     }
 
-    // Verificação PERMANENTE de IP (sem expiração de 24h)
     async checkDuplicateIP() {
         try {
             const userIP = await this.getUserIP();
@@ -119,14 +112,13 @@ class SupabaseManager {
             }
 
             const data = await response.json();
-            return data.length > 0; // Retorna true se IP já existe (BLOQUEIO PERMANENTE)
+            return data.length > 0;
         } catch (error) {
             console.error('Erro ao verificar duplicata:', error);
             throw new Error('Erro ao verificar se voce ja se inscreveu');
         }
     }
 
-    // Verificar se algum nickname já existe em outro time
     async checkDuplicateNicknames(nicknames) {
         try {
             const response = await fetch(
@@ -150,7 +142,6 @@ class SupabaseManager {
                 team.nicknames.split(',').map(n => n.trim().toUpperCase())
             );
 
-            // Verifica se algum dos nicknames já existe
             const duplicates = nicknames.filter(nick =>
                 allNicknames.includes(nick.toUpperCase())
             );
@@ -270,7 +261,6 @@ form.addEventListener('submit', async (e) => {
     apiError.textContent = '';
 
     try {
-        // 1. Verifica se o IP já registrou (BLOQUEIO PERMANENTE)
         const isDuplicate = await supabaseManager.checkDuplicateIP();
 
         if (isDuplicate) {
@@ -282,7 +272,6 @@ form.addEventListener('submit', async (e) => {
 
         const nicknames = Array.from(nicknameInputs).map(input => input.value.toUpperCase());
 
-        // 2. Verifica se algum nickname já existe em outro time
         const duplicateNicks = await supabaseManager.checkDuplicateNicknames(nicknames);
 
         if (duplicateNicks.length > 0) {

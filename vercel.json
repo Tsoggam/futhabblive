@@ -3,5 +3,5 @@
     "devCommand": "python -m http.server 3000",
     "installCommand": "echo 'No install needed'",
     "framework": "static",
-    "public": "."
+    "public": true
 }

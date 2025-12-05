@@ -1,9 +1,4 @@
 {
     "version": 2,
-    "routes": [
-        {
-            "src": "/(?!main\\.js|style\\.css)(.+)$",
-            "dest": "/index.html"
-        }
-    ]
+    "public": true
 }

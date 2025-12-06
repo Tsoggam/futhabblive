@@ -710,6 +710,10 @@ input[type="text"] {
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.4);
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
 }
 
 input[type="text"]::placeholder {
@@ -841,6 +845,7 @@ input[type="text"].error {
     background: #ff0000;
     border: 3px solid #ffff00;
     box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4);
+    display: none;
 }
 
 .success-message {

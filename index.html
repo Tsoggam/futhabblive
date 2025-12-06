@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habblive - Inscrições</title>
+    <title>Copa Habblive - Inscrições</title>
     <link rel="shortcut icon" href="//images.habblive.com/RECEPHLV01.png" type="image/vnd.microsoft.icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,9 +15,9 @@
 
     <div class="container">
         <div class="header">
-            <div class="habbo-character">🧑</div>
-            <div class="pixel-art-title">HABBLIVE COPA</div>
-            <div class="date-badge">⚽ 12/12 ⚽</div>
+            <div class="habbo-character"><i class="fa-solid fa-futbol" style="color: #ffff00;"></i></div>
+            <div class="pixel-art-title">COPA HABBLIVE DE FUTEBOL</div>
+            <div class="date-badge">12/12</div>
             <p class="subtitle">inscreva seu time!</p>
         </div>
 
@@ -24,22 +25,22 @@
             <form id="registrationForm">
                 <div class="form-section">
                     <div class="section-title">
-                        <span class="section-icon">👥</span>
+                        <span class="section-icon"><i class="fas fa-users"></i></span>
                         Jogadores no Time
                     </div>
 
                     <div class="radio-group">
                         <div class="radio-option">
                             <input type="radio" id="players3" name="playerCount" value="3" required>
-                            <label for="players3" class="radio-label">3️⃣<br>Jogadores</label>
+                            <label for="players3" class="radio-label"><i class="fa-solid fa-3"></i>Jogadores</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="players4" name="playerCount" value="4" required>
-                            <label for="players4" class="radio-label">4️⃣<br>Jogadores</label>
+                            <label for="players4" class="radio-label"><i class="fa-solid fa-4"></i>Jogadores</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="players5" name="playerCount" value="5" required>
-                            <label for="players5" class="radio-label">5️⃣<br>Jogadores</label>
+                            <label for="players5" class="radio-label"><i class="fa-solid fa-5"></i>Jogadores</label>
                         </div>
                     </div>
                     <div class="error-message" id="playerError">!! SELECIONE QUANTIDADE !!</div>
@@ -47,7 +48,7 @@
 
                 <div class="form-section">
                     <div class="section-title">
-                        <span class="section-icon">🎮</span>
+                        <span class="section-icon"><i class="fa-brands fa-phoenix-framework"></i></span>
                         Nicknames
                     </div>
 
@@ -57,23 +58,85 @@
                 </div>
 
                 <div class="info-box">
-                    <strong>⚽ Data: 12/12 ⚽</strong>
+                    <strong><i class="fa-regular fa-calendar-check"></i> 12/12</strong>
                     Prepare seu time! Será épico!
                 </div>
+
+                <button type="button" class="rules-btn" id="rulesBtn">
+                    REGRAS E PREMIAÇÃO
+                </button>
 
                 <button type="submit" class="submit-btn" id="submitBtn">→ Inscrever Time ←</button>
 
                 <div class="success-message" id="successMessage">
-                    ✅ TIME INSCRITO! ✅<br>
+                    TIME INSCRITO!<br>
                     NOS VEMOS NO DIA 12/12!
                 </div>
 
                 <div class="error-message" id="apiError"></div>
                 <div class="info-box" id="duplicateWarning" style="display: none; background: #ff6b00;">
-                    <strong>⚠️ AVISO ⚠️</strong>
-                    Você já inscreveu um time! Apenas 1 por IP.
+                    <strong>AVISO</strong>
+                    Você já inscreveu um time!
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">REGRAS E PREMIAÇÃO</span>
+                <div class="close-modal">×</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="rules-section">
+                    <div class="rules-section-title">
+                        PREMIAÇÃO
+                    </div>
+                    <div class="prize-box prize-gold">
+                        CAMPEÕES RECEBERÃO
+                        <div class="prize-items">
+                            <div class="prize-item">1.000 STAFFS PARA O TIME.</div>
+                            <div class="prize-item">EMBLEMA DE OURO PARA TODOS OS JOGADORES.</div>
+                        </div>
+                    </div>
+
+                    <div class="prize-box prize-silver">
+                        2º COLOCADO RECEBERÁ
+                        <div class="prize-items">
+                            <div class="prize-item">EMBLEMA DE PRATA PARA TODOS OS JOGADORES.</div>
+                        </div>
+                    </div>
+
+                    <div class="prize-box prize-bronze">
+                        3º COLOCADO RECEBERÁ
+                        <div class="prize-items">
+                            <div class="prize-item">EMBLEMA DE BRONZE PARA TODOS OS JOGADORES.</div>
+                        </div>
+                    </div>
+
+                    <div class="prize-box prize-special">
+                        PRÊMIOS INDIVIDUAIS
+                        <div class="prize-items">
+                            <div class="prize-item">LUVA DE OURO - MELHOR GOLEIRO DO CAMPEONATO</div>
+                            <div class="prize-item">CHUTEIRA DE OURO - ARTILHEIRO DO CAMPEONATO</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-section">
+                    <div class="rules-section-title">
+                        INFORMAÇÕES IMPORTANTES
+                    </div>
+                    <ul class="rules-list">
+                        <li>Apenas 1 inscrição por IP permitida</li>
+                        <li>Nicknames não podem ser duplicados</li>
+                        <li>Todos os nicknames devem ser válidos no Habblive</li>
+                        <li>Inscrições abertas até o dia do evento</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 

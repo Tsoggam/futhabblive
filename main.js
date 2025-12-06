@@ -73,6 +73,9 @@ const successMessage = document.getElementById('successMessage');
 const submitBtn = document.getElementById('submitBtn');
 const apiError = document.getElementById('apiError');
 const duplicateWarning = document.getElementById('duplicateWarning');
+const modal = document.getElementById('rulesModal');
+const rulesBtn = document.getElementById('rulesBtn');
+const closeBtn = document.querySelector('.close-modal');
 
 class SupabaseManager {
     constructor() {
@@ -223,6 +226,23 @@ playerCountRadios.forEach(radio => {
             nicknamesContainer.appendChild(wrapper);
         }
     });
+});
+
+rulesBtn.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+});
+
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
 });
 
 form.addEventListener('submit', async (e) => {

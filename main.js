@@ -164,7 +164,8 @@ class SupabaseManager {
                 player_count: parseInt(teamData.playerCount),
                 nicknames: teamData.nicknames.join(','),
                 user_ip: userIP,
-                created_at: new Date().toISOString()
+                created_at: new Date().toISOString(),
+                expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
             };
 
             const response = await fetch(
